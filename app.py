@@ -23,7 +23,7 @@ def get_setting(name: str, default: str) -> str:
 
 
 DEFAULT_HOST = get_setting("OLLAMA_HOST", "https://ollama.com").rstrip("/")
-DEFAULT_MODEL = get_setting("OLLAMA_MODEL", "gpt-oss:120b-cloud")
+DEFAULT_MODEL = get_setting("OLLAMA_MODEL", "gemma4:31b-cloud")
 OLLAMA_API_KEY = get_setting("OLLAMA_API_KEY", "")
 IS_CLOUD_HOST = DEFAULT_HOST.lower() in {"https://ollama.com", "https://api.ollama.com"}
 
@@ -188,8 +188,6 @@ if "messages" not in st.session_state:
     st.session_state["messages"] = []
 
 selected_model = DEFAULT_MODEL
-if available_models and DEFAULT_MODEL not in available_models:
-    selected_model = available_models[0]
 
 system_prompt = (
     "You are a professional executive advisor. Provide concise, structured, and strategic answers. "
