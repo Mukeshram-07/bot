@@ -11,9 +11,20 @@ import ollama
 # ------------------------------------------------------------------------------
 load_dotenv()
 
-DEFAULT_HOST = os.getenv("OLLAMA_HOST", "https://ollama.com").rstrip("/")
-DEFAULT_MODEL = os.getenv("OLLAMA_MODEL", "gpt-oss:120b-cloud")
-OLLAMA_API_KEY = os.getenv("OLLAMA_API_KEY", "").strip()
+def get_setting(name: str, default: str) -> str:
+    environment_value = os.getenv(name)
+    if environment_value:
+        return environment_value.strip()
+    try:
+        secret_value = st.secrets.get(name)
+    except Exception:
+        secret_value = None
+    return str(secret_value).strip() if secret_value else default
+
+
+DEFAULT_HOST = get_setting("OLLAMA_HOST", "https://ollama.com").rstrip("/")
+DEFAULT_MODEL = get_setting("OLLAMA_MODEL", "gpt-oss:120b-cloud")
+OLLAMA_API_KEY = get_setting("OLLAMA_API_KEY", "")
 IS_CLOUD_HOST = DEFAULT_HOST.lower() in {"https://ollama.com", "https://api.ollama.com"}
 
 st.set_page_config(
